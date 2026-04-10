@@ -4,8 +4,7 @@
 
 This repository contains the cutting edge matrix multiplication algorithms discovered by [AlphaTensor](https://www.deepmind.com/blog/discovering-novel-algorithms-with-alphatensor), representing the first novel machine-discovered algorithm ever 🦾 🧠 
 
-**Original Rust Implementation:** [simd-alphatensor-rs](https://github.com/drbh/simd-alphatensor-rs) by drbh (david.richard.holtz@gmail.com)  
-**Kotlin Translation:** @sydneyrenee / sydney@solace.ofharmony.ai (The Solace Project) / KotlinMania
+**Original Rust Implementation:** [simd-alphatensor-rs](https://github.com/drbh/simd-alphatensor-rs) by [drbh](https://github.com/drbh)
 
 This Kotlin implementation focuses on the key algorithms, particularly `multiply4By4MatrixAWith4By4MatrixB`, which uses fewer operations than any previously known method for 4x4 matrix multiplication.
 
@@ -155,3 +154,15 @@ fun multiply2By2MatrixAWith2By2MatrixB(a: IntArray, b: IntArray): IntArray {
 4. Explore JVM vector API (Project Panama) for potential SIMD-like optimizations
 5. Support additional numeric types (Long, Float, Double)
 6. Create Kotlin Multiplatform version for Native targets with SIMD support
+
+---
+
+## Acknowledgments
+
+This Kotlin port was created by **Sydney Renee** of [The Solace Project](mailto:sydney@solace.ofharmony.ai)
+for [KotlinMania](https://github.com/KotlinMania).
+
+Special thanks to the original authors:
+
+- [drbh](https://github.com/drbh) for the original [simd-alphatensor-rs](https://github.com/drbh/simd-alphatensor-rs) Rust implementation
+- [DeepMind](https://www.deepmind.com) for the AlphaTensor research
