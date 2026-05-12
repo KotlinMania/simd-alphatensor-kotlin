@@ -97,6 +97,140 @@ fun multiply2By2MatrixAWith2By2MatrixB(a: IntArray, b: IntArray): IntArray {
     return intArrayOf(c11, c12, c21, c22)
 }
 
+/**
+ * Multiply a 2x2 matrix A with a 2x3 matrix B using AlphaTensor algorithm.
+ *
+ * Uses 11 multiplications instead of the traditional 12.
+ *
+ * @param a Matrix A as a flattened array of 4 elements (row-major order)
+ * @param b Matrix B as a flattened array of 6 elements (row-major order)
+ * @return Result matrix C as a flattened array of 6 elements (row-major order)
+ */
+fun multiply2By2MatrixAWith2By3MatrixB(a: IntArray, b: IntArray): IntArray {
+    require(a.size == 4) { "Matrix A must have 4 elements" }
+    require(b.size == 6) { "Matrix B must have 6 elements" }
+
+    val (a11, a12, a21, a22) = a
+    val (b11, b12, b13, b21, b22, b23) = b
+
+    val lefts = arrayOf(
+        Int32x16.from(intArrayOf(
+            a21,
+            (a21 + a22),
+            (a12 + a21),
+            a12,
+            (a11 + a12),
+            (a11 - a21),
+            a11,
+            (a12 - a22),
+            (a21 - a22),
+            a12,
+            a22,
+            0, 0, 0, 0, 0
+        ))
+    )
+
+    val rights = arrayOf(
+        Int32x16.from(intArrayOf(
+            (b12 - b22),
+            b22,
+            (b13 + b22),
+            (b13 - b23),
+            b13,
+            (b12 + b13),
+            (b11 - b13),
+            (b22 + b23),
+            b11,
+            (b13 - b21),
+            (b11 + b21),
+            0, 0, 0, 0, 0
+        ))
+    )
+
+    val hs = arrayOf(lefts[0] * rights[0])
+
+    val c11 = (hs[0][4] + hs[0][6] - hs[0][9])
+    val c12 = (hs[0][8] + hs[0][10])
+    val c13 = (hs[0][0] + hs[0][2] - hs[0][4] + hs[0][5])
+    val c21 = (hs[0][0] + hs[0][1])
+    val c22 = (-hs[0][3] + hs[0][4])
+    val c23 = (-hs[0][1] + hs[0][2] - hs[0][3] - hs[0][7])
+
+    return intArrayOf(c11, c12, c13, c21, c22, c23)
+}
+
+/**
+ * Multiply a 2x2 matrix A with a 2x4 matrix B using AlphaTensor algorithm.
+ *
+ * Uses 14 multiplications instead of the traditional 16.
+ *
+ * @param a Matrix A as a flattened array of 4 elements (row-major order)
+ * @param b Matrix B as a flattened array of 8 elements (row-major order)
+ * @return Result matrix C as a flattened array of 8 elements (row-major order)
+ */
+fun multiply2By2MatrixAWith2By4MatrixB(a: IntArray, b: IntArray): IntArray {
+    require(a.size == 4) { "Matrix A must have 4 elements" }
+    require(b.size == 8) { "Matrix B must have 8 elements" }
+
+    val (a11, a12, a21, a22) = a
+    val (b11, b12, b13, b14, b21, b22, b23, b24) = b
+
+    val lefts = arrayOf(
+        Int32x16.from(intArrayOf(
+            a11,
+            (a11 - a12),
+            (a11 + a22),
+            a22,
+            a11,
+            (a11 - a12),
+            (a11 - a12 - a22),
+            (a12 + a22),
+            (a11 - a12 + a21 - a22),
+            a22,
+            (a11 + a21),
+            (a21 - a22),
+            a21,
+            (a12 + a22),
+            0,
+            0
+        ))
+    )
+
+    val rights = arrayOf(
+        Int32x16.from(intArrayOf(
+            (b14 + b24),
+            b24,
+            (b11 - b24),
+            (b11 + b21 - b22),
+            (b13 + b23),
+            b23,
+            (b12 + b13 + b23),
+            (b12 + b13 + b22 + b23),
+            (b12 + b13),
+            b22,
+            (b11 + b14),
+            b11,
+            b12,
+            (b12 + b13 + b21 + b22 + b23 + b24),
+            0,
+            0
+        ))
+    )
+
+    val hs = arrayOf(lefts[0] * rights[0])
+
+    val c11 = (hs[0][1] + hs[0][2] - hs[0][3] - hs[0][7] - hs[0][9] + hs[0][13])
+    val c12 = (hs[0][3] + hs[0][9] + hs[0][11])
+    val c13 = (-hs[0][4] + hs[0][6] + hs[0][7] - hs[0][9])
+    val c14 = (hs[0][9] + hs[0][12])
+    val c21 = (hs[0][4] - hs[0][5])
+    val c22 = (hs[0][5] - hs[0][6] + hs[0][8] - hs[0][12])
+    val c23 = (hs[0][0] - hs[0][1])
+    val c24 = (-hs[0][0] - hs[0][2] + hs[0][10] - hs[0][11])
+
+    return intArrayOf(c11, c12, c13, c14, c21, c22, c23, c24)
+}
+
 // Component operators for destructuring IntArray (up to 16 elements)
 private operator fun IntArray.component1() = this[0]
 private operator fun IntArray.component2() = this[1]
@@ -114,6 +248,103 @@ private operator fun IntArray.component13() = this[12]
 private operator fun IntArray.component14() = this[13]
 private operator fun IntArray.component15() = this[14]
 private operator fun IntArray.component16() = this[15]
+
+/**
+ * Multiply a 3x3 matrix A with a 3x3 matrix B using AlphaTensor algorithm.
+ *
+ * Uses 23 multiplications, matching the best known bound for 3x3 matrix
+ * multiplication (Laderman 1976 / Smirnov 1986).
+ *
+ * @param a Matrix A as a flattened array of 9 elements (row-major order)
+ * @param b Matrix B as a flattened array of 9 elements (row-major order)
+ * @return Result matrix C as a flattened array of 9 elements (row-major order)
+ */
+fun multiply3By3MatrixAWith3By3MatrixB(a: IntArray, b: IntArray): IntArray {
+    require(a.size == 9) { "Matrix A must have 9 elements" }
+    require(b.size == 9) { "Matrix B must have 9 elements" }
+
+    val (a11, a12, a13, a21, a22, a23, a31, a32, a33) = a
+    val (b11, b12, b13, b21, b22, b23, b31, b32, b33) = b
+
+    val lefts = arrayOf(
+        Int32x16.from(intArrayOf(
+            a32,
+            (a11 - a31 + a32),
+            (a22 - a23 - a32),
+            a12,
+            (a12 + a22 - a23),
+            (a22 - a23 - a32 + a33),
+            a33,
+            (a11 - a31 - a33),
+            (a12 - a13 + a22 - a23),
+            (a31 - a32),
+            (a31 + a33),
+            (a11 - a12 - a31 + a32),
+            (a11 + a13 - a31 - a33),
+            a11,
+            (a12 + a22),
+            (a22 - a23)
+        )),
+        Int32x16.from(intArrayOf(
+            (a21 + a22 - a31 - a32),
+            (a21 + (a31 shl 1) + (a33 shl 1)),
+            (a22 - a32),
+            (a11 - a31),
+            (a12 - a21 + a22),
+            a13,
+            (a21 + a23 + (a31 shl 1) + (a33 shl 1)),
+            0, 0, 0, 0, 0, 0, 0, 0, 0
+        ))
+    )
+
+    val rights = arrayOf(
+        Int32x16.from(intArrayOf(
+            (b12 - b21 + b22),
+            (b12 - (b21 shl 1) + b22 + b23),
+            (b21 + b32),
+            (b21 - b23),
+            (b21 + b33),
+            b32,
+            (b11 - b31 + b32),
+            (b11 - b31 + b33),
+            b33,
+            b12,
+            b11,
+            ((b21 shl 1) - b22 - b23),
+            (b31 - b33),
+            b13,
+            (b13 + b23 + b33),
+            b21
+        )),
+        Int32x16.from(intArrayOf(
+            b12,
+            (b11 - b21 - b31),
+            (b12 - b22 - b32),
+            (b11 - b12 - b13 + (b21 shl 1) - b22 - b23 - b31 + b33),
+            b13,
+            (b32 - b33),
+            (b21 + b31),
+            0, 0, 0, 0, 0, 0, 0, 0, 0
+        ))
+    )
+
+    val hs = arrayOf(
+        lefts[0] * rights[0],
+        lefts[1] * rights[1]
+    )
+
+    val c11 = (hs[0][4] + hs[0][7] - hs[0][8] + hs[0][10] + hs[0][12] - hs[0][15])
+    val c12 = (-(hs[0][10] shl 1) + hs[0][15] + hs[1][1] + hs[1][6])
+    val c13 = (-hs[0][2] + hs[0][5] - hs[0][6] + hs[0][10] + hs[0][15])
+    val c21 = (hs[0][1] + hs[0][3] + hs[0][4] - hs[0][8] + hs[0][9] + hs[0][11] - hs[0][15] + hs[1][5])
+    val c22 = (hs[0][0] - hs[0][2] + hs[0][9] + hs[0][15] + hs[1][0] - hs[1][2])
+    val c23 = (hs[0][0] - hs[0][2] + hs[0][5] + hs[0][9] + hs[0][15])
+    val c31 = (-hs[0][3] + hs[0][4] - hs[0][8] + hs[0][13] - hs[0][15])
+    val c32 = (hs[0][3] - hs[0][4] + hs[0][14] + hs[0][15] - hs[1][4])
+    val c33 = (-hs[0][0] + hs[0][1] - hs[0][2] + hs[0][5] - hs[0][6] - hs[0][7] + hs[0][13] + hs[0][15] + hs[1][3])
+
+    return intArrayOf(c11, c12, c13, c21, c22, c23, c31, c32, c33)
+}
 
 /**
  * Multiply a 4x4 matrix A with a 4x4 matrix B using AlphaTensor algorithm.
@@ -259,18 +490,18 @@ fun multiply4By4MatrixAWith4By4MatrixB(a: IntArray, b: IntArray): IntArray {
     val c11 = (hs[0][0] - hs[0][1] - hs[0][4] + hs[0][8] + hs[0][14] + hs[2][0])
     val c12 = (-hs[0][14] - hs[0][15] + hs[1][0] - hs[1][1] - hs[1][4] + hs[1][5] - hs[1][6] + hs[1][9] - hs[2][0] - hs[2][8] + hs[2][11] + hs[3][0])
     val c13 = (hs[0][1] + hs[0][4] + hs[0][5] - hs[0][8] - hs[1][12] - hs[2][0] + hs[2][1] + hs[2][5])
-    val c14 = (-hs[0][2] - hs[0][14] + hs[1][0] - hs[1][1] + hs[1][2] - hs[1][8] + hs[1][12] - hs[2][0] - hs[2][8] + hs[2][9] + hs[2][13])
-    val c21 = (hs[0][12] + hs[0][13] + hs[0][14] + hs[0][15] - hs[1][0] - hs[1][9] - hs[1][12] + hs[2][4] + hs[2][5])
-    val c22 = (hs[0][6] + hs[0][9] - hs[1][1] + hs[1][7] - hs[2][4] - hs[2][8] + hs[2][11] + hs[2][12])
-    val c23 = (hs[0][7] + hs[0][13] - hs[1][12] + hs[2][5] + hs[2][12])
-    val c24 = (hs[0][6] + hs[0][11] + hs[0][12] + hs[0][14] + hs[0][15] - hs[1][0] - hs[1][1] - hs[1][12] - hs[2][8] + hs[2][9] + hs[2][12])
-    val c31 = (-hs[0][2] - hs[0][3] + hs[1][13] - hs[2][0] + hs[2][2] + hs[2][5])
-    val c32 = (hs[0][1] + hs[0][4] - hs[1][5] + hs[1][6] + hs[1][8] + hs[1][13] + hs[1][14] - hs[2][0] - hs[2][8] + hs[2][11])
-    val c33 = (hs[0][2] + hs[0][3] - hs[0][5] - hs[1][13] + hs[1][14] - hs[2][0] + hs[2][2])
-    val c34 = (hs[0][1] + hs[0][3] + hs[0][4] - hs[1][10] - hs[1][11] + hs[1][13] + hs[1][14] - hs[2][0] - hs[2][8] + hs[2][9] + hs[2][13] + hs[2][14])
-    val c41 = (hs[0][10] + hs[0][12] + hs[0][14] - hs[1][9] - hs[2][1] + hs[2][4] - hs[2][7] - hs[2][11])
+    val c14 = (-hs[0][15] + hs[1][0] - hs[1][3] - hs[1][4] + hs[1][5] - hs[1][6] + hs[1][8] + hs[1][9] - hs[1][12] - hs[1][15] - hs[2][0] + hs[2][1] + hs[2][5] - hs[2][8] + hs[2][9] + hs[2][10])
+    val c21 = (-hs[0][6] + hs[0][7] - hs[0][9] + hs[0][10] - hs[0][13] + hs[0][14] + hs[0][15] - hs[1][0] + hs[1][1] + hs[1][4] - hs[1][14] + hs[2][0] - hs[2][2] - hs[2][3])
+    val c22 = (hs[0][6] - hs[0][7] + hs[0][9] - hs[0][10] - hs[0][14] - hs[0][15] + hs[1][0] - hs[1][1] - hs[1][4] + hs[1][5] - hs[1][6] + hs[1][9] - hs[2][0] + hs[2][11])
+    val c23 = (-hs[0][6] + hs[0][7] + hs[0][10] + hs[0][11] - hs[0][15] + hs[1][0] - hs[1][3] - hs[1][4] - hs[1][12] - hs[2][0] + hs[2][1] + hs[2][3] + hs[2][5] + hs[2][13])
+    val c24 = (-hs[0][6] + hs[0][7] + hs[0][10] + hs[0][11] - hs[0][15] + hs[1][0] - hs[1][3] - hs[1][4] + hs[1][5] - hs[1][6] + hs[1][8] + hs[1][9] - hs[1][12] - hs[2][0] + hs[2][1] + hs[2][5])
+    val c31 = (hs[0][0] - hs[0][1] + hs[0][2] - hs[0][4] + hs[2][0] - hs[2][1] + hs[2][4] - hs[2][7])
+    val c32 = (hs[1][0] - hs[1][1] - hs[1][2] - hs[1][4] - hs[1][6] + hs[1][7] + hs[1][9] - hs[2][0] + hs[2][1] - hs[2][4] + hs[2][7] - hs[2][10] + hs[2][11] + hs[2][12] - hs[2][14] + hs[3][0])
+    val c33 = (hs[0][3] + hs[0][4] - hs[1][12] - hs[2][0] + hs[2][1] + hs[2][7])
+    val c34 = (-hs[1][4] + hs[1][9] - hs[1][10] + hs[1][11] - hs[1][12] - hs[1][15] - hs[2][0] + hs[2][1] + hs[2][7] - hs[2][14])
+    val c41 = (hs[0][7] - hs[0][9] + hs[0][10] - hs[0][12] + hs[1][0] - hs[1][1] - hs[1][2] - hs[1][4] + hs[1][14] - hs[2][0] + hs[2][1] + hs[2][2] + hs[2][3] - hs[2][4] - hs[2][6] + hs[2][7])
+    val c42 = (-hs[0][7] + hs[0][9] - hs[0][10] + hs[0][12] - hs[1][0] + hs[1][1] + hs[1][2] + hs[1][4] + hs[1][6] - hs[1][7] - hs[1][9] + hs[2][0] - hs[2][1] + hs[2][4] - hs[2][7] - hs[2][11])
     val c43 = (hs[0][10] + hs[1][4] - hs[1][11] + hs[1][12] + hs[1][13] + hs[2][0] - hs[2][1] - hs[2][2] - hs[2][3] + hs[2][6] - hs[2][7] + hs[2][15])
-    val c42 = (hs[0][10] + hs[0][11] - hs[1][2] + hs[1][3] + hs[1][4] - hs[1][5] + hs[1][7] - hs[2][1] + hs[2][4] - hs[2][7] - hs[2][8] + hs[2][11] + hs[2][12])
     val c44 = (hs[0][10] + hs[1][4] - hs[1][9] + hs[1][10] - hs[1][11] + hs[1][12] + hs[2][0] - hs[2][1] - hs[2][7] + hs[2][15])
     
     return intArrayOf(
