@@ -1,3 +1,20 @@
-rootProject.name = "simd-alphatensor-kotlin"
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+    plugins { kotlin("multiplatform") version "2.3.21" }
+}
 
-include("codegen")
+plugins { id("org.gradle.toolchains.foojay-resolver-convention") version "0.9.0" }
+
+dependencyResolutionManagement {
+    repositories {
+        mavenLocal()
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.name = "simd-alphatensor"
