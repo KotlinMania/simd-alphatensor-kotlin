@@ -4,6 +4,19 @@ import kotlin.random.Random
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
 
+/**
+ * Multiplies two row-major matrices and returns the row-major result matrix.
+ *
+ * - [a] is an `m × k` matrix encoded in row-major order.
+ * - [b] is a `k × n` matrix encoded in row-major order.
+ * - The returned array is an `m × n` matrix encoded in row-major order.
+ *
+ * @param a left operand matrix data (`m × k`, row-major)
+ * @param b right operand matrix data (`k × n`, row-major)
+ * @param m number of rows in [a] and in the result
+ * @param k number of columns in [a] / rows in [b]
+ * @param n number of columns in [b] and in the result
+ */
 private fun naiveMultiply(a: IntArray, b: IntArray, m: Int, k: Int, n: Int): IntArray {
     require(a.size == m * k)
     require(b.size == k * n)
@@ -20,8 +33,19 @@ private fun naiveMultiply(a: IntArray, b: IntArray, m: Int, k: Int, n: Int): Int
     return c
 }
 
+/**
+ * Generates a flattened row-major matrix as an [IntArray] of [size] elements for test inputs.
+ *
+ * Each generated value is sampled uniformly from the half-open range `[-bound, bound)`.
+ *
+ * @param rng random source used to generate values.
+ * @param size total number of elements in the flattened matrix.
+ * @param bound exclusive absolute bound for generated values (default: 100).
+ */
 private fun randomMatrix(rng: Random, size: Int, bound: Int = 100): IntArray =
     IntArray(size) { rng.nextInt(-bound, bound) }
+
+private const val RANDOM_TEST_ITERATIONS = 64
 
 /**
  * Upstream AlphaTensor algorithms emit their result as `reshape(n, m).T`. Reinterpret the
@@ -43,7 +67,7 @@ class MatrixMultiplicationTest {
     @Test
     fun matrixMultiply_2x2_by_2x2_matchesNaive() {
         val rng = Random(0xA1FA)
-        repeat(64) {
+        repeat(RANDOM_TEST_ITERATIONS) {
             val a = randomMatrix(rng, 4)
             val b = randomMatrix(rng, 4)
             val got = reorderResult(multiply2By2MatrixAWith2By2MatrixB(a, b), 2, 2)
@@ -54,7 +78,7 @@ class MatrixMultiplicationTest {
     @Test
     fun matrixMultiply_2x2_by_2x3_matchesNaive() {
         val rng = Random(0xA1FB)
-        repeat(64) {
+        repeat(RANDOM_TEST_ITERATIONS) {
             val a = randomMatrix(rng, 4)
             val b = randomMatrix(rng, 6)
             val got = reorderResult(multiply2By2MatrixAWith2By3MatrixB(a, b), 2, 3)
@@ -65,7 +89,7 @@ class MatrixMultiplicationTest {
     @Test
     fun matrixMultiply_2x2_by_2x4_matchesNaive() {
         val rng = Random(0xA1FC)
-        repeat(64) {
+        repeat(RANDOM_TEST_ITERATIONS) {
             val a = randomMatrix(rng, 4)
             val b = randomMatrix(rng, 8)
             val got = reorderResult(multiply2By2MatrixAWith2By4MatrixB(a, b), 2, 4)
@@ -76,7 +100,7 @@ class MatrixMultiplicationTest {
     @Test
     fun matrixMultiply_3x3_by_3x3_matchesNaive() {
         val rng = Random(0xA1FD)
-        repeat(64) {
+        repeat(RANDOM_TEST_ITERATIONS) {
             val a = randomMatrix(rng, 9)
             val b = randomMatrix(rng, 9)
             val got = reorderResult(multiply3By3MatrixAWith3By3MatrixB(a, b), 3, 3)
@@ -87,7 +111,7 @@ class MatrixMultiplicationTest {
     @Test
     fun matrixMultiply_4x4_by_4x4_matchesNaive() {
         val rng = Random(0xA1FE)
-        repeat(64) {
+        repeat(RANDOM_TEST_ITERATIONS) {
             val a = randomMatrix(rng, 16)
             val b = randomMatrix(rng, 16)
             val got = reorderResult(multiply4By4MatrixAWith4By4MatrixB(a, b), 4, 4)
