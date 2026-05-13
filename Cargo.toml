@@ -10,7 +10,7 @@ members = [
 ]
 
 [dev-dependencies]
-criterion = "0.3"
+criterion = "0.5"
 ndarray = "0.15.6"
 
 [[bench]]
