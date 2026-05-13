@@ -41,7 +41,7 @@ private fun reorderResult(arr: IntArray, m: Int, n: Int): IntArray {
 class MatrixMultiplicationTest {
 
     @Test
-    fun `2x2 by 2x2 matches naive`() {
+    fun matrixMultiply_2x2_by_2x2_matchesNaive() {
         val rng = Random(0xA1FA)
         repeat(64) {
             val a = randomMatrix(rng, 4)
@@ -52,7 +52,7 @@ class MatrixMultiplicationTest {
     }
 
     @Test
-    fun `2x2 by 2x3 matches naive`() {
+    fun matrixMultiply_2x2_by_2x3_matchesNaive() {
         val rng = Random(0xA1FB)
         repeat(64) {
             val a = randomMatrix(rng, 4)
@@ -63,7 +63,7 @@ class MatrixMultiplicationTest {
     }
 
     @Test
-    fun `2x2 by 2x4 matches naive`() {
+    fun matrixMultiply_2x2_by_2x4_matchesNaive() {
         val rng = Random(0xA1FC)
         repeat(64) {
             val a = randomMatrix(rng, 4)
@@ -74,7 +74,7 @@ class MatrixMultiplicationTest {
     }
 
     @Test
-    fun `3x3 by 3x3 matches naive`() {
+    fun matrixMultiply_3x3_by_3x3_matchesNaive() {
         val rng = Random(0xA1FD)
         repeat(64) {
             val a = randomMatrix(rng, 9)
@@ -85,7 +85,7 @@ class MatrixMultiplicationTest {
     }
 
     @Test
-    fun `4x4 by 4x4 matches naive`() {
+    fun matrixMultiply_4x4_by_4x4_matchesNaive() {
         val rng = Random(0xA1FE)
         repeat(64) {
             val a = randomMatrix(rng, 16)
@@ -96,7 +96,7 @@ class MatrixMultiplicationTest {
     }
 
     @Test
-    fun `3x3 identity is identity`() {
+    fun matrixMultiply_3x3_identityIsIdentity() {
         val identity = intArrayOf(1, 0, 0, 0, 1, 0, 0, 0, 1)
         val a = intArrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
         assertContentEquals(a, reorderResult(multiply3By3MatrixAWith3By3MatrixB(a, identity), 3, 3))

@@ -28,5 +28,8 @@ bin/
 # Local configuration
 local.properties
 
+# Kotlin JS/Wasm store build artifacts
+kotlin-js-store/wasm/
+
 # Log files
 *.log
