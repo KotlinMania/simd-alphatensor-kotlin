@@ -63,7 +63,6 @@ private fun reorderResult(arr: IntArray, m: Int, n: Int): IntArray {
 }
 
 class MatrixMultiplicationTest {
-
     @Test
     fun matrixMultiply_2x2_by_2x2_matchesNaive() {
         val rng = Random(0xA1FA)
@@ -94,6 +93,50 @@ class MatrixMultiplicationTest {
             val b = randomMatrix(rng, 8)
             val got = reorderResult(multiply2By2MatrixAWith2By4MatrixB(a, b), 2, 4)
             assertContentEquals(naiveMultiply(a, b, 2, 2, 4), got)
+        }
+    }
+
+    @Test
+    fun matrixMultiply_2x2_by_2x5_matchesNaive() {
+        val rng = Random(0xA1FD1)
+        repeat(RANDOM_TEST_ITERATIONS) {
+            val a = randomMatrix(rng, 4)
+            val b = randomMatrix(rng, 10)
+            val got = reorderResult(multiply2By2MatrixAWith2By5MatrixB(a, b), 2, 5)
+            assertContentEquals(naiveMultiply(a, b, 2, 2, 5), got)
+        }
+    }
+
+    @Test
+    fun matrixMultiply_2x2_by_2x6_matchesNaive() {
+        val rng = Random(0xA1FD2)
+        repeat(RANDOM_TEST_ITERATIONS) {
+            val a = randomMatrix(rng, 4)
+            val b = randomMatrix(rng, 12)
+            val got = reorderResult(multiply2By2MatrixAWith2By6MatrixB(a, b), 2, 6)
+            assertContentEquals(naiveMultiply(a, b, 2, 2, 6), got)
+        }
+    }
+
+    @Test
+    fun matrixMultiply_2x2_by_2x7_matchesNaive() {
+        val rng = Random(0xA1FD3)
+        repeat(RANDOM_TEST_ITERATIONS) {
+            val a = randomMatrix(rng, 4)
+            val b = randomMatrix(rng, 14)
+            val got = reorderResult(multiply2By2MatrixAWith2By7MatrixB(a, b), 2, 7)
+            assertContentEquals(naiveMultiply(a, b, 2, 2, 7), got)
+        }
+    }
+
+    @Test
+    fun matrixMultiply_2x2_by_2x8_matchesNaive() {
+        val rng = Random(0xA1FD4)
+        repeat(RANDOM_TEST_ITERATIONS) {
+            val a = randomMatrix(rng, 4)
+            val b = randomMatrix(rng, 16)
+            val got = reorderResult(multiply2By2MatrixAWith2By8MatrixB(a, b), 2, 8)
+            assertContentEquals(naiveMultiply(a, b, 2, 2, 8), got)
         }
     }
 
