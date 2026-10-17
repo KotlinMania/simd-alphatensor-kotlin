@@ -7,12 +7,12 @@ import kotlin.test.assertContentEquals
 /**
  * Multiplies two row-major matrices and returns the row-major result matrix.
  *
- * - [a] is an `m × k` matrix encoded in row-major order.
- * - [b] is a `k × n` matrix encoded in row-major order.
- * - The returned array is an `m × n` matrix encoded in row-major order.
+ * - [a] is an `m x k` matrix encoded in row-major order.
+ * - [b] is a `k x n` matrix encoded in row-major order.
+ * - The returned array is an `m x n` matrix encoded in row-major order.
  *
- * @param a left operand matrix data (`m × k`, row-major)
- * @param b right operand matrix data (`k × n`, row-major)
+ * @param a left operand matrix data (`m x k`, row-major)
+ * @param b right operand matrix data (`k x n`, row-major)
  * @param m number of rows in [a] and in the result
  * @param k number of columns in [a] / rows in [b]
  * @param n number of columns in [b] and in the result
@@ -65,7 +65,7 @@ private fun reorderResult(arr: IntArray, m: Int, n: Int): IntArray {
 class MatrixMultiplicationTest {
     @Test
     fun matrixMultiply_2x2_by_2x2_matchesNaive() {
-        val rng = Random(0xA1FA)
+        val rng = Random(0x222A)
         repeat(RANDOM_TEST_ITERATIONS) {
             val a = randomMatrix(rng, 4)
             val b = randomMatrix(rng, 4)
@@ -76,7 +76,7 @@ class MatrixMultiplicationTest {
 
     @Test
     fun matrixMultiply_2x2_by_2x3_matchesNaive() {
-        val rng = Random(0xA1FB)
+        val rng = Random(0x223A)
         repeat(RANDOM_TEST_ITERATIONS) {
             val a = randomMatrix(rng, 4)
             val b = randomMatrix(rng, 6)
@@ -87,7 +87,7 @@ class MatrixMultiplicationTest {
 
     @Test
     fun matrixMultiply_2x2_by_2x4_matchesNaive() {
-        val rng = Random(0xA1FC)
+        val rng = Random(0x224A)
         repeat(RANDOM_TEST_ITERATIONS) {
             val a = randomMatrix(rng, 4)
             val b = randomMatrix(rng, 8)
@@ -98,7 +98,7 @@ class MatrixMultiplicationTest {
 
     @Test
     fun matrixMultiply_2x2_by_2x5_matchesNaive() {
-        val rng = Random(0xA1FD1)
+        val rng = Random(0x225A)
         repeat(RANDOM_TEST_ITERATIONS) {
             val a = randomMatrix(rng, 4)
             val b = randomMatrix(rng, 10)
@@ -109,7 +109,7 @@ class MatrixMultiplicationTest {
 
     @Test
     fun matrixMultiply_2x2_by_2x6_matchesNaive() {
-        val rng = Random(0xA1FD2)
+        val rng = Random(0x226A)
         repeat(RANDOM_TEST_ITERATIONS) {
             val a = randomMatrix(rng, 4)
             val b = randomMatrix(rng, 12)
@@ -120,7 +120,7 @@ class MatrixMultiplicationTest {
 
     @Test
     fun matrixMultiply_2x2_by_2x7_matchesNaive() {
-        val rng = Random(0xA1FD3)
+        val rng = Random(0x227A)
         repeat(RANDOM_TEST_ITERATIONS) {
             val a = randomMatrix(rng, 4)
             val b = randomMatrix(rng, 14)
@@ -131,7 +131,7 @@ class MatrixMultiplicationTest {
 
     @Test
     fun matrixMultiply_2x2_by_2x8_matchesNaive() {
-        val rng = Random(0xA1FD4)
+        val rng = Random(0x228A)
         repeat(RANDOM_TEST_ITERATIONS) {
             val a = randomMatrix(rng, 4)
             val b = randomMatrix(rng, 16)
@@ -141,8 +141,74 @@ class MatrixMultiplicationTest {
     }
 
     @Test
+    fun matrixMultiply_2x3_by_3x3_matchesNaive() {
+        val rng = Random(0x233A)
+        repeat(RANDOM_TEST_ITERATIONS) {
+            val a = randomMatrix(rng, 6)
+            val b = randomMatrix(rng, 9)
+            val got = reorderResult(multiply2By3MatrixAWith3By3MatrixB(a, b), 2, 3)
+            assertContentEquals(naiveMultiply(a, b, 2, 3, 3), got)
+        }
+    }
+
+    @Test
+    fun matrixMultiply_2x3_by_3x4_matchesNaive() {
+        val rng = Random(0x234A)
+        repeat(RANDOM_TEST_ITERATIONS) {
+            val a = randomMatrix(rng, 6)
+            val b = randomMatrix(rng, 12)
+            val got = reorderResult(multiply2By3MatrixAWith3By4MatrixB(a, b), 2, 4)
+            assertContentEquals(naiveMultiply(a, b, 2, 3, 4), got)
+        }
+    }
+
+    @Test
+    fun matrixMultiply_2x3_by_3x5_matchesNaive() {
+        val rng = Random(0x235A)
+        repeat(RANDOM_TEST_ITERATIONS) {
+            val a = randomMatrix(rng, 6)
+            val b = randomMatrix(rng, 15)
+            val got = reorderResult(multiply2By3MatrixAWith3By5MatrixB(a, b), 2, 5)
+            assertContentEquals(naiveMultiply(a, b, 2, 3, 5), got)
+        }
+    }
+
+    @Test
+    fun matrixMultiply_2x4_by_4x4_matchesNaive() {
+        val rng = Random(0x244A)
+        repeat(RANDOM_TEST_ITERATIONS) {
+            val a = randomMatrix(rng, 8)
+            val b = randomMatrix(rng, 16)
+            val got = reorderResult(multiply2By4MatrixAWith4By4MatrixB(a, b), 2, 4)
+            assertContentEquals(naiveMultiply(a, b, 2, 4, 4), got)
+        }
+    }
+
+    @Test
+    fun matrixMultiply_2x4_by_4x5_matchesNaive() {
+        val rng = Random(0x245A)
+        repeat(RANDOM_TEST_ITERATIONS) {
+            val a = randomMatrix(rng, 8)
+            val b = randomMatrix(rng, 20)
+            val got = reorderResult(multiply2By4MatrixAWith4By5MatrixB(a, b), 2, 5)
+            assertContentEquals(naiveMultiply(a, b, 2, 4, 5), got)
+        }
+    }
+
+    @Test
+    fun matrixMultiply_2x5_by_5x5_matchesNaive() {
+        val rng = Random(0x255A)
+        repeat(RANDOM_TEST_ITERATIONS) {
+            val a = randomMatrix(rng, 10)
+            val b = randomMatrix(rng, 25)
+            val got = reorderResult(multiply2By5MatrixAWith5By5MatrixB(a, b), 2, 5)
+            assertContentEquals(naiveMultiply(a, b, 2, 5, 5), got)
+        }
+    }
+
+    @Test
     fun matrixMultiply_3x3_by_3x3_matchesNaive() {
-        val rng = Random(0xA1FD)
+        val rng = Random(0x333A)
         repeat(RANDOM_TEST_ITERATIONS) {
             val a = randomMatrix(rng, 9)
             val b = randomMatrix(rng, 9)
@@ -152,14 +218,137 @@ class MatrixMultiplicationTest {
     }
 
     @Test
+    fun matrixMultiply_3x3_by_3x4_matchesNaive() {
+        val rng = Random(0x334A)
+        repeat(RANDOM_TEST_ITERATIONS) {
+            val a = randomMatrix(rng, 9)
+            val b = randomMatrix(rng, 12)
+            val got = reorderResult(multiply3By3MatrixAWith3By4MatrixB(a, b), 3, 4)
+            assertContentEquals(naiveMultiply(a, b, 3, 3, 4), got)
+        }
+    }
+
+    @Test
+    fun matrixMultiply_3x3_by_3x5_matchesNaive() {
+        val rng = Random(0x335A)
+        repeat(RANDOM_TEST_ITERATIONS) {
+            val a = randomMatrix(rng, 9)
+            val b = randomMatrix(rng, 15)
+            val got = reorderResult(multiply3By3MatrixAWith3By5MatrixB(a, b), 3, 5)
+            assertContentEquals(naiveMultiply(a, b, 3, 3, 5), got)
+        }
+    }
+
+    @Test
+    fun matrixMultiply_3x4_by_4x4_matchesNaive() {
+        val rng = Random(0x344A)
+        repeat(RANDOM_TEST_ITERATIONS) {
+            val a = randomMatrix(rng, 12)
+            val b = randomMatrix(rng, 16)
+            val got = reorderResult(multiply3By4MatrixAWith4By4MatrixB(a, b), 3, 4)
+            assertContentEquals(naiveMultiply(a, b, 3, 4, 4), got)
+        }
+    }
+
+    @Test
+    fun matrixMultiply_3x4_by_4x5_matchesNaive() {
+        val rng = Random(0x345A)
+        repeat(RANDOM_TEST_ITERATIONS) {
+            val a = randomMatrix(rng, 12)
+            val b = randomMatrix(rng, 20)
+            val got = reorderResult(multiply3By4MatrixAWith4By5MatrixB(a, b), 3, 5)
+            assertContentEquals(naiveMultiply(a, b, 3, 4, 5), got)
+        }
+    }
+
+    @Test
+    fun matrixMultiply_3x5_by_5x5_matchesNaive() {
+        val rng = Random(0x355A)
+        repeat(RANDOM_TEST_ITERATIONS) {
+            val a = randomMatrix(rng, 15)
+            val b = randomMatrix(rng, 25)
+            val got = reorderResult(multiply3By5MatrixAWith5By5MatrixB(a, b), 3, 5)
+            assertContentEquals(naiveMultiply(a, b, 3, 5, 5), got)
+        }
+    }
+
+    @Test
+    fun matrixMultiply_3x5_by_5x9_matchesNaive() {
+        val rng = Random(0x359A)
+        repeat(RANDOM_TEST_ITERATIONS) {
+            val a = randomMatrix(rng, 15)
+            val b = randomMatrix(rng, 45)
+            val got = reorderResult(multiply3By5MatrixAWith5By9MatrixB(a, b), 3, 9)
+            assertContentEquals(naiveMultiply(a, b, 3, 5, 9), got)
+        }
+    }
+
+    @Test
     fun matrixMultiply_4x4_by_4x4_matchesNaive() {
-        val rng = Random(0xA1FE)
+        val rng = Random(0x444A)
         repeat(RANDOM_TEST_ITERATIONS) {
             val a = randomMatrix(rng, 16)
             val b = randomMatrix(rng, 16)
             val got = reorderResult(multiply4By4MatrixAWith4By4MatrixB(a, b), 4, 4)
             assertContentEquals(naiveMultiply(a, b, 4, 4, 4), got)
         }
+    }
+
+    @Test
+    fun matrixMultiply_4x4_by_4x5_matchesNaive() {
+        val rng = Random(0x445A)
+        repeat(RANDOM_TEST_ITERATIONS) {
+            val a = randomMatrix(rng, 16)
+            val b = randomMatrix(rng, 20)
+            val got = reorderResult(multiply4By4MatrixAWith4By5MatrixB(a, b), 4, 5)
+            assertContentEquals(naiveMultiply(a, b, 4, 4, 5), got)
+        }
+    }
+
+    @Test
+    fun matrixMultiply_4x5_by_5x5_matchesNaive() {
+        val rng = Random(0x455A)
+        repeat(RANDOM_TEST_ITERATIONS) {
+            val a = randomMatrix(rng, 20)
+            val b = randomMatrix(rng, 25)
+            val got = reorderResult(multiply4By5MatrixAWith5By5MatrixB(a, b), 4, 5)
+            assertContentEquals(naiveMultiply(a, b, 4, 5, 5), got)
+        }
+    }
+
+    @Test
+    fun matrixMultiply_4x5_by_5x9_matchesNaive() {
+        val rng = Random(0x459A)
+        repeat(RANDOM_TEST_ITERATIONS) {
+            val a = randomMatrix(rng, 20)
+            val b = randomMatrix(rng, 45)
+            val got = reorderResult(multiply4By5MatrixAWith5By9MatrixB(a, b), 4, 9)
+            assertContentEquals(naiveMultiply(a, b, 4, 5, 9), got)
+        }
+    }
+
+    @Test
+    fun matrixMultiply_3x4_by_4x11_zerosAndOnes() {
+        val zerosA = IntArray(12)
+        val zerosB = IntArray(44)
+        assertContentEquals(IntArray(33), multiply3By4MatrixAWith4By11MatrixB(zerosA, zerosB))
+
+        val onesA = IntArray(12) { 1 }
+        val onesB = IntArray(44) { 1 }
+        val expectedOnes = IntArray(33) { 4 }
+        assertContentEquals(expectedOnes, multiply3By4MatrixAWith4By11MatrixB(onesA, onesB))
+    }
+
+    @Test
+    fun matrixMultiply_3x9_by_9x11_zerosAndRegression() {
+        val zerosA = IntArray(27)
+        val zerosB = IntArray(99)
+        assertContentEquals(IntArray(33), multiply3By9MatrixAWith9By11MatrixB(zerosA, zerosB))
+
+        val onesA = IntArray(27) { 1 }
+        val onesB = IntArray(99) { 1 }
+        val expectedOnes = intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 6, 6, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12, 12, 9, 0, 0, 0)
+        assertContentEquals(expectedOnes, multiply3By9MatrixAWith9By11MatrixB(onesA, onesB))
     }
 
     @Test
